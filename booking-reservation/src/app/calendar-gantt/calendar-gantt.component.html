@@ -1,0 +1,22 @@
+<ion-card color="light">
+  <ion-card-header>
+    <ion-segment value="Day">
+      <ion-segment-button (click)="_ganttChangeView('Day')" value="Day">
+        <ion-label>Giorno</ion-label>
+      </ion-segment-button>
+      <ion-segment-button (click)="_ganttChangeView('Week')" value="Week">
+        <ion-label>Settimana</ion-label>
+      </ion-segment-button>
+      <!-- <ion-segment-button (click)="_ganttChangeView('Month')"value="Month">
+                <ion-label>Mese</ion-label>
+              </ion-segment-button> -->
+    </ion-segment>
+
+  </ion-card-header>
+  <ion-item lines="none" padding *ngIf="!_ready">
+    <ion-spinner color="primary"></ion-spinner>
+  </ion-item>
+  <svg id="gantt-{{gantt_id}}">
+  </svg>
+
+</ion-card>

@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="room? '/rooms/'+room.id+'/bookings' : '/'"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Prenotazione</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-book-detail *ngIf="room" [_room]="room" [_book]="book">
+  </app-book-detail>
+</ion-content>

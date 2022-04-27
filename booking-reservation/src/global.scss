@@ -1,0 +1,166 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import "~@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+ion-content{
+  // --background: linear-gradient(62deg, #fcab7d 100%, #fddd8a 0%);
+  // --background: linear-gradient(45deg, #FBDA61 0%, #FF5ACD 100%);
+  // --background: linear-gradient(19deg, #FAACA8 0%, #DDD6F3 100%);
+  // --background: linear-gradient(to top, #f3e7e9 0%, #e3eeff 99%, #e3eeff 100%);
+  --background: linear-gradient( 109.6deg,  rgba(255,207,84,1) 11.2%, rgba(255,158,27,1) 91.1% );
+}
+ion-popover {
+  margin-top: 1em;
+}
+
+ion-item > ion-card[full] {
+  flex-basis: 100%;
+}
+ion-label.label-floating {
+  margin-left: 0.5em !important;
+}
+ion-input input {
+  padding-left: 0.5em !important;
+}
+ion-input {
+  background-color: #c8c8c814 !important;
+  border-radius: 0.5em !important;
+}
+ion-input.white {
+  background-color: transparent !important;
+}
+
+ion-card {
+  border-radius: 1em;
+  // box-shadow: 0 2.8px 2.2px rgb(0 0 0 / 3%), 0 6.7px 5.3px rgb(0 0 0 / 5%),
+  //   0 12.5px 10px rgb(0 0 0 / 6%), 0 22.3px 17.9px rgb(0 0 0 / 7%) !important;
+  box-shadow: 0 2.8px 2.2px rgb(0 0 0 / 3%), 0 4.7px 12.3px rgb(0 0 0 / 5%) !important;
+}
+
+ion-item {
+  --background: transparent;
+}
+// ion-title.big{
+//   // font-size: 4vmin;
+//   //   margin-bottom: 1vmin;
+//   //   padding-left: 0px;
+// }
+
+.modal-booking-details {
+  --margin-bottom: 4vh;
+  --width: min(900px, 95vw);
+  --height: 90vh;
+  --positions: absolute;
+  --border-radius: 1em;
+  align-items: end;
+
+  .modal-wrapper {
+    margin-bottom: 10vh;
+  }
+}
+.gantt-container .popup-wrapper {
+  border-radius: 2em !important;
+  background-color: rgb(0 0 0 / 18%);
+}
+.gantt .tick {
+  stroke: #aaa !important;
+}
+.gantt .today-highlight {
+  fill: #ffeb3b !important;
+  opacity: 0.5;
+}
+.gantt .bar-label {
+  font-weight: bold !important;
+  text-anchor: middle !important;
+  &.big {
+    text-anchor: end !important;
+  }
+}
+.gantt .bar-wrapper.active .bar-progress {
+  stroke: white;
+  stroke-linejoin: round;
+  stroke-width: 2px;
+  filter: drop-shadow(0px 5px 4px rgba(0, 0, 0, 0.2));
+}
+.gantt .gantt_task_status_1 .bar-progress,
+.gantt .bar-wrapper.gantt_task_status_1.active .bar-progress,
+.gantt .bar-wrapper.gantt_task_status_1:hover .bar-progress {
+  fill: #2dd36f;
+}
+.gantt .gantt_task_status_0 .bar-progress,
+.gantt .bar-wrapper.gantt_task_status_0.active .bar-progress,
+.gantt .bar-wrapper.gantt_task_status_0:hover .bar-progress {
+  fill: #ebb508;
+}
+.gantt .gantt_task_status_-1 .bar-progress,
+.gantt .bar-wrapper.gantt_task_status_-1.active .bar-progress,
+.gantt .bar-wrapper.gantt_task_status_-1:hover .bar-progress {
+  fill: #eb445a;
+}
+/*
+.gantt .gantt_task_room_1 .bar-progress {
+  fill: var(--room-color-1);
+}
+.gantt .gantt_task_room_1 .bar-progress {
+  fill: var(--room-color-1);
+}
+
+.gantt .gantt_task_room_1 .bar-progress {
+  fill: var(--room-color-1);
+}
+.gantt .gantt_task_room_2 .bar-progress {
+  fill: var(--room-color-2);
+}
+.gantt .gantt_task_room_3 .bar-progress {
+  fill: var(--room-color-3);
+}
+.gantt .gantt_task_room_4 .bar-progress {
+  fill: var(--room-color-4)
+}
+.gantt .gantt_task_room_5 .bar-progress {
+  fill: var(--room-color-5);
+}
+.gantt .gantt_task_room_6 .bar-progress {
+  fill: var(--room-color-6);
+}
+.gantt .gantt_task_room_7 .bar-progress {
+  fill: var(--room-color-7);
+}
+.gantt .gantt_task_room_8 .bar-progress {
+  fill: var(--room-color-8);
+}
+.gantt .gantt_task_room_9 .bar-progress {
+  fill: var(--room-color-9);
+}
+.gantt .gantt_task_room_10 .bar-progress {
+  fill: var(--room-color-10);
+}
+.gantt .gantt_task_room_11 .bar-progress {
+  fill: var(--room-color-11);
+}
+.gantt .gantt_task_room_12 .bar-progress {
+  fill: var(--room-color-12);
+}
+*/

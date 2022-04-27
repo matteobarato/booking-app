@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Hotel</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding="true">
+  <ion-grid>
+    <ion-item>
+      <ion-icon name="calendar-outline" size="large" slot="start" color="tertiary"></ion-icon>
+
+      <ion-text>
+        <h1>
+          Calendario
+        </h1>
+      </ion-text>
+    </ion-item>
+    <ion-row>
+      <ion-col>
+        <app-calendar-gantt [_rooms]="rooms"></app-calendar-gantt>
+      </ion-col>
+    </ion-row>
+    <hr>
+    <ion-item>
+      <ion-icon name="home-outline" size="large" slot="start" color="tertiary"></ion-icon>
+      <ion-text>
+        <h1>Camere</h1>
+      </ion-text>
+    </ion-item>
+    <ion-row>
+      <ion-col *ngFor="let room of rooms">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="bed-outline" size="large" color="tertiary"></ion-icon>
+                <ion-text slot="end" color="tertiary">
+                  <ion-icon name="people-circle-outline" size="large"></ion-icon>
+                  <b>{{(room.capacity_adult || 0) + (room.capacity_child || 0)}}</b>
+                </ion-text>
+              </ion-item>
+            </ion-card-title>
+            <ion-card-subtitle>
+              <ion-item lines="none">
+                <ion-label position="fixed"><b>Camera:</b></ion-label>
+
+                <ion-card>
+
+                  <ion-input class="white" color="tertiary" [(ngModel)]="room.name" placeholder="Nome Stanza"
+                    [readonly]="!room._editable"></ion-input>
+                </ion-card>
+              </ion-item>
+            </ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="12">
+                <ion-item lines="none"><b>Posti letto:</b></ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Adulti</ion-label>
+                  <ion-input [(ngModel)]="room.capacity_adult" type="number" [readonly]="!room._editable"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating"> Bambini</ion-label>
+                  <ion-input [(ngModel)]="room.capacity_child" type="number" [readonly]="!room._editable"></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-item>
+              <ion-label position="floating">Prezzo €/notte:</ion-label>
+              <ion-input [(ngModel)]="room.current_price" type="number" [readonly]="!room._editable"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Tassa di soggiorno €/notte * persona:</ion-label>
+              <ion-input [(ngModel)]="room.rent_tax" type="number" [readonly]="!room._editable"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating"><b>Note:</b></ion-label>
+              <ion-textarea [(ngModel)]="room.note" [readonly]="!room._editable"></ion-textarea>
+            </ion-item>
+            <ion-item *ngIf="room._editable || room.is_online">
+              <ion-icon name="cloud-done-outline" color="primary" slot="start" [color]="room.is_online? 'primary' : 'medium'"></ion-icon>
+              <ion-card >
+                <ion-button fill="clear" >
+                  <ion-toggle [(ngModel)]="room.is_online" *ngIf="room._editable"></ion-toggle>
+                  <ion-label [color]="room.is_online? 'primary' : 'medium'">
+                    Booking
+                  </ion-label>
+                </ion-button>
+              </ion-card>
+            </ion-item>
+            <!-- <ion-item>
+              <ion-label>Colore in calendario</ion-label>
+              <input type="text" [(ngModel)]="room.color" id="data-coloris-{{room.id}}" data-coloris>
+              <span class="dot" (click)="openColorPicker(room)" [ngStyle]="{'background-color': room.color || '#fff'}"></span>
+            </ion-item> -->
+            <ion-item lines="none">
+              <ion-button *ngIf="room.id" slot="start" color="warning" [routerLink]="['/rooms', room.id, 'bookings']">
+                PREONOTAZIONI
+                <ion-icon name="book-outline" slot="end"></ion-icon>
+                <ion-icon name="arrow-redo-outline" slot="end"></ion-icon>
+              </ion-button>
+              <ion-button slot="end" color="light" (click)="room._editable=!room._editable">
+                <ion-icon slot="icon-only" [name]="room._editable? 'close':'create-outline'"></ion-icon>
+              </ion-button>
+              <ion-button slot="end" [hidden]="!room._editable" color="danger" (click)="deleteRoom(room)">
+                ELIMINA <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+
+              <ion-button slot="end" [hidden]="!room._editable" color="success" (click)="saveRoom(room)">
+                SALVA <ion-icon slot="end" name="save-outline"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-item>
+        <ion-button slot="end" color="primary" size="big" (click)="newRoom()">
+          <ion-icon slot="icon-only" name="add-outline"> </ion-icon>
+          <ion-icon slot="icon-only" name="bed-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-row>
+  </ion-grid>
+</ion-content>

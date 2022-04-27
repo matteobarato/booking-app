@@ -1,0 +1,28 @@
+.scrolly{
+    width: auto;
+    height: auto;
+    overflow: auto;
+    overflow-y: hidden;
+    margin: 0 auto;
+    white-space: nowrap
+}
+.gantt-calendar{
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+.gantt-calendar-content{
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.gantt-calendar-content-col{
+    border-right: solid 1px rgba(128, 128, 128, 0.39);
+    padding: 1em;
+    min-height: 200px;
+}
+
+.gantt-calendar-content-col-today{
+    background-color: rgba(212, 212, 130, 0.425)
+}

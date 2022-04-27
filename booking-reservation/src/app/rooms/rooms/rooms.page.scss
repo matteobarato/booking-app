@@ -1,0 +1,14 @@
+:host{
+    .dot {
+        height: 2em;
+        width: 2em;
+        border-radius: 50%;
+        display: inline-block;
+        border: solid 2px #d7d8da;
+        cursor: pointer;        
+      }
+
+    *[data-coloris]{
+        height: 1px; width: 1px; visibility: hidden;
+    }
+}
