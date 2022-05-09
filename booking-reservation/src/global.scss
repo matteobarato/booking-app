@@ -24,12 +24,16 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
-ion-content{
+ion-content {
   // --background: linear-gradient(62deg, #fcab7d 100%, #fddd8a 0%);
   // --background: linear-gradient(45deg, #FBDA61 0%, #FF5ACD 100%);
   // --background: linear-gradient(19deg, #FAACA8 0%, #DDD6F3 100%);
   // --background: linear-gradient(to top, #f3e7e9 0%, #e3eeff 99%, #e3eeff 100%);
-  --background: linear-gradient( 109.6deg,  rgba(255,207,84,1) 11.2%, rgba(255,158,27,1) 91.1% );
+  --background: linear-gradient(
+    109.6deg,
+    rgba(255, 207, 84, 1) 11.2%,
+    rgba(255, 158, 27, 1) 91.1%
+  );
 }
 ion-popover {
   margin-top: 1em;
@@ -73,7 +77,7 @@ ion-item {
   --width: min(900px, 95vw);
   --height: 90vh;
   --positions: absolute;
-  --border-radius: 1em;
+  --border-radius: 10px;
   align-items: end;
 
   .modal-wrapper {
@@ -81,8 +85,11 @@ ion-item {
   }
 }
 .gantt-container .popup-wrapper {
-  border-radius: 2em !important;
+  border-radius: 20px !important;
   background-color: rgb(0 0 0 / 18%);
+  ion-card {
+    margin: 5px !important;
+  }
 }
 .gantt .tick {
   stroke: #aaa !important;
@@ -118,6 +125,35 @@ ion-item {
 .gantt .bar-wrapper.gantt_task_status_-1.active .bar-progress,
 .gantt .bar-wrapper.gantt_task_status_-1:hover .bar-progress {
   fill: #eb445a;
+}
+.gantt .gantt_task_status_2 .bar-progress,
+.gantt .bar-wrapper.gantt_task_status_2.active .bar-progress,
+.gantt .bar-wrapper.gantt_task_status_2:hover .bar-progress {
+  fill: #b2c7ec;
+  stroke-width: 5px;
+  stroke: #b2c7ec;
+}
+.gantt .gantt_task_status_3 .bar-progress,
+.gantt .bar-wrapper.gantt_task_status_3.active .bar-progress,
+.gantt .bar-wrapper.gantt_task_status_3:hover .bar-progress {
+  fill: #5260ff;
+  stroke-width: 5px;
+  stroke: #5260ff;
+}
+.bar-label-is_online {
+  fill: var(--ion-color-primary);
+  dominant-baseline: central;
+  text-anchor: middle;
+  font-size: 12px;
+  font-weight: bold !important;
+  height: 1.5em;
+  width: 1.5em;
+  background: white;
+  border-radius: 50%;
+  padding: 2px;
+  svg{
+    color: var(--ion-color-primary);
+  }
 }
 /*
 .gantt .gantt_task_room_1 .bar-progress {

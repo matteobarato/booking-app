@@ -591,6 +591,15 @@ class Bar {
             class: 'bar-label',
             append_to: this.bar_group
         });
+        if (this.task.ref && this.task.ref.is_online){
+            createSVG('foreignObject', {
+                x: this.x + 5,
+                y: this.y + 5,
+                innerHTML: '<svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><title>Cloud Done</title><path d="M400 240c-8.89-89.54-71-144-144-144-69 0-113.44 48.2-128 96-60 6-112 43.59-112 112 0 66 54 112 120 112h260c55 0 100-27.44 100-88 0-59.82-53-85.76-96-88z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M317 208L209.2 336 163 284.8"/></svg>',
+                class: 'bar-label-is_online',
+                append_to: this.bar_group
+            });
+        }
         // labels get BBox in the next tick
         requestAnimationFrame(() => this.update_label_position());
     }
@@ -1463,7 +1472,6 @@ class Gantt {
                     30;
             } else {
                 tick_x += this.options.column_width;
-                console.log(this.options.column_width)
             }
         }
     }

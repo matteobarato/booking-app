@@ -66,7 +66,7 @@ export class BookDetailComponent implements OnInit {
 
   saveBooking(book: Book) {
     book.room = this.room.id;
-    console.log(book)
+    console.log("SAVING BOOK", book)
     this.apiService.updateBook(book).subscribe((b) => {
       if (b && b.id) {
         if (!book.id) this.room.bookings.push(book); // appena creato
@@ -104,8 +104,7 @@ export class BookDetailComponent implements OnInit {
   }
 
   formatDate(value: string) {
-    console.log(value);
-    return format(parseISO(value), 'MMM dd yyyy');
+    return format(parseISO(value).setHours(0, 0, 0, 0), 'MMM dd yyyy');
   }
 
   updateBookDayPrice() {
@@ -113,7 +112,7 @@ export class BookDetailComponent implements OnInit {
       <Date>this.book.start_at,
       <Date>this.book.end_at
     );
-    if (!this.book.bill) {
+    if (!this.book.bill || !this.book.bill.length) {
       this.book.bill = [
         { key: 'Prezzo Soggiorno', value: 0 },
         { key: 'Tasse Soggiorno', value: 0 },
@@ -129,7 +128,7 @@ export class BookDetailComponent implements OnInit {
     if (!book.bill.length) book._total = 0;
     else{
       let book_rent_price = (book.bill[0].value * this._rent_days + book.bill[1].value * this._rent_days)
-      book._total = book.bill.slice(2).map((x) => x.value).reduce((a, b) => a + b) || 0 ;
+      book._total = book.bill.length > 2 ? (book.bill.slice(2).map((x) => x.value).reduce((a, b) => a + b), 0) : 0 ;
       book._total += book_rent_price
 
     }

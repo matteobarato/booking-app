@@ -8,12 +8,13 @@ import { environment } from 'src/environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { catchError, map } from 'rxjs/operators';
-
+import { BookStatus } from './models';
 @Injectable({
   providedIn: 'root',
 })
 export class ApiServiceService {
   apiUrl: string = environment.apiUrl;
+  book_status = new BookStatus();
 
   constructor(
     public http: HttpClient,
@@ -123,6 +124,7 @@ export class ApiServiceService {
     let states = {previous:[], currents:[], next:[]}
     
     books
+    .filter(x=>x.status != this.book_status.online)
     .sort((a, b) => new Date(a.start_at).getTime()- new Date(b.start_at).getTime())
     .forEach(b=> {
       let state = this.currentDate(b.start_at, b.end_at)

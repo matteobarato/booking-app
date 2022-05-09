@@ -61,16 +61,14 @@ module.exports = {
   _overlapping_dates_query: (from, to) => {
     return [
       {
-        start_at: { "<": to },
-        end_at: { ">": from },
+        start_at: { ">": from, "<": to},
       },
       {
-        start_at: { "<=": to },
-        end_at: { ">": from },
+        end_at: { ">": from, "<": to },
       },
       {
-        start_at: { "<": to },
-        end_at: { ">=": from },
+        start_at: { "<": from},
+        end_at: { ">": to },
       },
     ];
   },
@@ -83,6 +81,7 @@ module.exports = {
   ) {
     let room = await Room.findOne({ id: roomId }).populate("bookings", {
       where: {
+        status: { "!=": [2] },
         id: { "!=": [bookingId] },
         or: Room._overlapping_dates_query(from, to),
       },
@@ -120,7 +119,6 @@ module.exports = {
   },
 
   isAvailable: async function (roomId, from, to, bookingId = undefined) {
-    console.log("isAvailable ", { roomId, from, to, bookingId });
     let busy = await Room.isBusy(roomId, from, to, bookingId);
     return !busy;
   },

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { format, parseISO } from 'date-fns';
+import { ta } from 'date-fns/locale';
 declare var Gantt;
 
 class GanttTask {
@@ -31,7 +32,7 @@ export class CalendarGanttComponent implements OnInit {
     if (!rooms.length && rooms.id) {
       rooms = [rooms]
     }
-    console.log(rooms);
+    // console.log(rooms);
     this.rooms = rooms;
     if (!rooms || !rooms.length) this.tasks = [];
     else this.ngOnInit()
@@ -58,6 +59,7 @@ export class CalendarGanttComponent implements OnInit {
       // console.log(task)
       const end_date = this.formatDate(task.end_at)
       const start_date = this.formatDate(task.start_at)
+      const status_label = task.ref['status'] == 1? 'Confermato': task.ref['status'] == -1? 'Cancellata':  task.ref['status'] == 0 ? 'In Attesa' : task.ref['status'] == 2 ? 'Booking' : 'Bozza';
       return `
       <ion-card>
         <ion-card-container>
@@ -86,6 +88,20 @@ export class CalendarGanttComponent implements OnInit {
               <ion-text>${task.ref['peopleNumber']}</ion-text>
             </ion-button>
         </ion-item>
+        <ion-item>
+        <ion-icon name="information-circle-outline" color="primary" slot="start"></ion-icon>
+          <ion-button fill="clear">
+            <ion-text>${status_label}<ion-text>
+          </ion-button>
+        </ion-item>
+        `+
+        (task.ref['is_online'] ?
+          `<ion-item>
+        <ion-icon name="cloud-done-outline" color="primary" slot="start"></ion-icon>
+                  <ion-label color="primary">
+                    <b>Booking</b>
+                  </ion-label>
+        </ion-item>`: ``) + `
         <ion-card-container>
       </ion-card>
       `;
@@ -110,21 +126,24 @@ export class CalendarGanttComponent implements OnInit {
   }
 
   updateTaskFromRooms(rooms: any[]): GanttTask[] {
-    console.log(rooms);
     let tasks: GanttTask[] = [];
     for (let [room_index, room] of rooms.entries()) {
       if (!room['bookings']) continue;
-      let book_tasks: GanttTask[] = room['bookings'].map((b) => {
+      let book_tasks: GanttTask[] = room['bookings'].sort((a,b)=>(-a.status+b.status)).map((b) => {
         let t: GanttTask = new GanttTask();
         t.id = `${room['id']}-${b.id}`;
         t.group_id = room['name']
         t.start = new Date(b.start_at).toISOString();
-        t.end = new Date(new Date(b.end_at).setHours(0,0,0,0)).toISOString();
+        t.end = new Date(new Date(b.end_at).setHours(0, 0, 0, 0)).toISOString();
         t.start_at = new Date(b.start_at).toISOString();
         t.end_at = new Date(b.end_at).toISOString();
-        t.name = `[${room['name']}]: ${(b.people.cognome_nome || '').substr(0, 10) + '...' || ''
-          }.`;
-        t.title = `[${room['name']}]: ${b.people.cognome_nome || ''}`
+        if (b.status == 2) {
+          t.name = t.title = '[Booking]'
+        } else {
+          t.name = `[${room['name']}]: ${(b.people.cognome_nome || '').substr(0, 10) + '...' || ''
+            }.`;
+          t.title = `[${room['name']}]: ${b.people.cognome_nome || ''}`
+        }
         t.ref = b
         t.custom_class =
           'gantt_task_status_' + b.status + ' gantt_task_room_' + (room_index + 1);
@@ -132,13 +151,11 @@ export class CalendarGanttComponent implements OnInit {
         // Setting color based on roomId
         // document.documentElement.style.setProperty('--room-color-' + (room_index + 1), room.color);
 
-        // Setting color based on book's status
-
         return t;
       });
       tasks = tasks.concat(book_tasks);
     }
-    console.log('Gantt Tasks', tasks);
+    // console.log('Gantt Tasks', tasks);
     return tasks;
   }
 

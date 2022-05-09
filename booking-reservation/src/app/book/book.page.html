@@ -42,8 +42,8 @@
               <ion-item lines="none">
                 <ion-card-title> Stanza: {{room.name}}</ion-card-title>
                 <ion-button shape="round" fill="outline" slot="end"
-                  [color]="_book['status'] == 1? 'success': _book['status'] == -1? 'danger':'warning'">
-                  <ion-text>{{_book['status'] == 1? 'Confermato': _book['status'] == -1? 'Cancellata':'In Attesa'}}</ion-text>
+                  [color]="_book['status'] == 1? 'success': _book['status'] == -1? 'danger': _book['status'] == 0 ? 'warning' : _book['status'] == 2 ? 'primary' : 'tertiary' ">
+                  <ion-text>{{_book['status'] == 1? 'Confermato': _book['status'] == -1? 'Cancellata':  _book['status'] == 0 ? 'In Attesa' : _book['status'] == 2 ? 'Booking' : 'Bozza'}}</ion-text>
                   <ion-icon name="book-outline" slot="end"></ion-icon>
                 </ion-button>
               </ion-item>
@@ -76,7 +76,7 @@
                     Ospiti: {{_book['peopleNumber']}}
                   </ion-label>
                 </ion-item>
-                <ion-item *ngIf="_book.is_online">
+                <ion-item *ngIf="_book['is_online']">
                   <ion-icon name="cloud-done-outline" color="primary" slot="start"></ion-icon>
                   <ion-label color="primary">
                     <b>Booking</b>

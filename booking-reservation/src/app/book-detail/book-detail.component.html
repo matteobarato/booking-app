@@ -2,13 +2,15 @@
   <ion-title slot="start" class="big">Stanza: {{ room.name }}</ion-title>
   <ion-buttons slot="end">
     <ion-button shape="round" fill="outline" [color]="
-        book.status == 1 ? 'success' : book.status == -1 ? 'danger' : 'warning'
+        book.status == 1 ? 'success' : book.status == -1 ? 'danger' : book.status == 0 ? 'warning' : book.status == 2 ? 'primary' : 'tertiary'
       ">
-      <ion-select [(ngModel)]="book.status" okText="Ok" cancelText="Cancella" interface="popover"
-        >
+      <ion-select [(ngModel)]="book.status" okText="Ok" cancelText="Cancella" interface="popover">
         <ion-select-option [value]="_book_status.confirmed">Confermato</ion-select-option>
         <ion-select-option [value]="_book_status.pending">In Attesa</ion-select-option>
         <ion-select-option [value]="_book_status.canceled">Cancellata</ion-select-option>
+        <ion-select-option [value]="_book_status.online">Booking</ion-select-option>
+        <ion-select-option [value]="_book_status.draft">Bozza</ion-select-option>
+
       </ion-select>
     </ion-button>
     <!-- <ion-button shape="round" slot="end" fill="clear" (click)="closeModal()">
@@ -16,8 +18,8 @@
       </ion-button> -->
   </ion-buttons>
 </ion-toolbar>
-<ion-content *ngIf="room" class="ion-padding">
-  <ion-list lines>
+<ion-content *ngIf="room" class="ion-padding" [color]="book.status == _book_status.online? 'primary' : ''">
+  <ion-list lines >
     <ion-item *ngIf="_rooms && _rooms.length">
       <ion-icon slot="start" color="warning" icon="bed-outline"></ion-icon>
       <ion-card>
@@ -65,217 +67,220 @@
         </ion-popover>
       </ion-card>
     </ion-item>
-    <ion-item>
-      <ion-icon name="cloud-done-outline" color="primary" slot="start" [color]="book.is_online? 'primary' : 'medium'"></ion-icon>
-      <ion-card>
-        <ion-button fill="clear" >
-          <ion-toggle [(ngModel)]="book.is_online"></ion-toggle>
-          <ion-label [color]="book.is_online? 'primary' : 'medium'">
-            Booking
-          </ion-label>
-        </ion-button>
-      </ion-card>
-    </ion-item>
-
-    <ion-item color="primary">
-      <ion-card full>
-        <ion-list>
-          <ion-item>
-            <ion-icon slot="start" color="primary" icon="people-outline"></ion-icon>
-            <ion-label>Ospiti</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label position="floating">Persone n°:</ion-label>
-            <ion-input [(ngModel)]="book.peopleNumber" type="number" min="0" >
-            </ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-card full>
-              <ion-item-divider>
-                <ion-icon slot="start" color="primary" name="person-circle-outline"></ion-icon>
-                <ion-label slot="start"> PERSONA </ion-label>
-              </ion-item-divider>
-              <ion-col size="12">
-                <ion-item line="none">
-                  <ion-label position="floating">Cognome Nome</ion-label>
-                  <ion-input [(ngModel)]="book.people.cognome_nome"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="6">
-                <ion-item line="none">
-                  <ion-label position="floating">Sesso</ion-label>
-                  <ion-input [(ngModel)]="book.people.sesso"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="6">
-                <!--  -->
-              </ion-col>
-              <ion-col size="6">
-                <ion-item line="none">
-                  <ion-label position="floating">Data di Nascita</ion-label>
-                  <ion-input [(ngModel)]="book.people.data_nascita"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="6">
-                <ion-item line="none">
-                  <ion-label position="floating">Luogo di nascita</ion-label>
-                  <ion-input [(ngModel)]="book.people.luogo_nascita"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="6">
-                <ion-item line="none">
-                  <ion-label position="floating">Cittadinanza</ion-label>
-                  <ion-input [(ngModel)]="book.people.cittadinanza"></ion-input>
-                </ion-item>
-              </ion-col>
-              <!--  -->
-              <ion-item-divider>
-                <ion-icon slot="start" name="home-outline" color="primary"></ion-icon>
-                <ion-label slot="start"> RESIDENZA </ion-label>
-              </ion-item-divider>
-              <ion-col size="12">
-                <ion-item line="none">
-                  <ion-label position="floating">Residenza</ion-label>
-                  <ion-textarea [(ngModel)]="book.people.residenza"></ion-textarea>
-                </ion-item>
-              </ion-col>
-              <ion-col size="3">
-                <ion-item line="none">
-                  <ion-label position="floating">Tipo documento</ion-label>
-                  <ion-input [(ngModel)]="book.people.tipo_documento"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="6">
-                <ion-item line="none">
-                  <ion-label position="floating">Numero documento</ion-label>
-                  <ion-input [(ngModel)]="book.people.numero_documento"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="3">
-                <ion-item line="none">
-                  <ion-label position="floating">Luogo e data di rilascio</ion-label>
-                  <ion-input [(ngModel)]="book.people.luogo_data_rilascio"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-item-divider>
-                <ion-icon slot="start" name="people-circle-outline" color="primary"></ion-icon>
-                <ion-label slot="start">
-                  FAMIGLIARI / MEMBRI DEL GRUPPO
-                </ion-label>
-              </ion-item-divider>
-              <ion-col>
-                <ion-item *ngFor="let p of book.people.membri_gruppo; let i = index">
-                  <ion-card full>
-                    <ion-item>
-                      <ion-icon slot="start" color="primary" name="person-circle-outline"></ion-icon>
-                      <ion-label> MEMBRO {{ i + 2 }} </ion-label>
-                      <ion-button *ngIf="book._editable" fill="clear" shape="round" color="danger" slot="end"
-                        (click)="removePeople(i)" title="Rimuovi ospite">
-                        <ion-icon name="remove-circle-outline" slot="icon-only"></ion-icon>
-                      </ion-button>
-                    </ion-item>
-                    <ion-col size="12">
-                      <ion-item line="none">
-                        <ion-label position="floating">Cognome Nome</ion-label>
-                        <ion-input [(ngModel)]="p.cognome_nome"></ion-input>
-                      </ion-item>
-                    </ion-col>
-                    <ion-col size="6">
-                      <ion-item line="none">
-                        <ion-label position="floating">Sesso</ion-label>
-                        <ion-input [(ngModel)]="p.sesso"></ion-input>
-                      </ion-item>
-                    </ion-col>
-                    <ion-col size="6">
-                      <!--  -->
-                    </ion-col>
-                    <ion-col size="6">
-                      <ion-item line="none">
-                        <ion-label position="floating">Data di Nascita</ion-label>
-                        <ion-input [(ngModel)]="p.data_nascita"></ion-input>
-                      </ion-item>
-                    </ion-col>
-                    <ion-col size="6">
-                      <ion-item line="none">
-                        <ion-label position="floating">Luogo di nascita</ion-label>
-                        <ion-input [(ngModel)]="p.luogo_nascita"></ion-input>
-                      </ion-item>
-                    </ion-col>
-                    <ion-col size="6">
-                      <ion-item line="none">
-                        <ion-label position="floating">Cittadinanza</ion-label>
-                        <ion-input [(ngModel)]="p.cittadinanza"></ion-input>
-                      </ion-item>
-                    </ion-col>
-                  </ion-card>
-                </ion-item>
-              </ion-col>
-              <ion-item lines="none">
-                <ion-button *ngIf="book._editable" shape="round" color="success" slot="end"
-                  (click)="addPeople()" title="Aggiungi ospite">
-                  <ion-icon name="person-add-outline" slot="start"></ion-icon>
-                  <ion-text>Aggiungi Ospite</ion-text>
-                </ion-button>
-              </ion-item>
-            </ion-card>
-          </ion-item>
-        </ion-list>
-      </ion-card>
-    </ion-item>
-
-    <ion-item color="success">
-      <ion-card full>
-        <ion-list lines="full">
-          <ion-item>
-            <ion-icon name="card-outline" color="primary" slot="start"></ion-icon>
-            <ion-label>Totale</ion-label>
-          </ion-item>
-          <ion-item *ngIf="book.bill && book.bill.length > 0">
-            <ion-input disabled [(ngModel)]="book.bill[0].key" placeholder="Nome" slot="start"></ion-input>
-            <ion-input [(ngModel)]="book.bill[0].value" type="number" (change)="updateTotal(book)" placeholder="Prezzo"
-              step=".01">
-            </ion-input>
-            <ion-text slot="end">
-              € / notte &times; {{ this._rent_days }} gg = <ion-text color="medium">{{this._rent_days *
-                book.bill[0].value}} €</ion-text>
-            </ion-text>
-          </ion-item>
-          <ion-item *ngIf="book.bill && book.bill.length > 1">
-            <ion-input disabled [(ngModel)]="book.bill[1].key" placeholder="Nome" slot="start"></ion-input>
-            <ion-input [(ngModel)]="book.bill[1].value" type="number" (change)="updateTotal(book)" placeholder="Prezzo"
-              step=".01">
-            </ion-input>
-            <ion-text slot="end">
-              € / notte &times; {{ this._rent_days }} gg = <ion-text color="medium">{{this._rent_days *
-                book.bill[1].value}} €</ion-text>
-            </ion-text>
-          </ion-item>
-          <ion-item *ngFor="let item of book.bill | slice: 2; let i = index">
-
-            <ion-input [(ngModel)]="item.key" placeholder="Nome" slot="start"></ion-input>
-
-            <ion-input [(ngModel)]="item.value" type="number" (change)="updateTotal(book)" placeholder="Prezzo"
-              step=".01">
-            </ion-input>
-
-            <ion-button shape="round" fill="clear" color="danger" slot="end"
-              (click)="book.bill.splice(i, 1); updateTotal(book)">
-              <ion-icon name="remove-circle-outline" slot="icon-only"></ion-icon>
-            </ion-button>
-          </ion-item>
-          <ion-item-divider>
-            <ion-label slot="start"> Totale </ion-label>
-            <ion-label>
-              <b>{{ book._total }} €</b>
+    <ng-container *ngIf="book.status != _book_status.online">
+      <ion-item>
+        <ion-icon name="cloud-done-outline" color="primary" slot="start" [color]="book.is_online? 'primary' : 'medium'">
+        </ion-icon>
+        <ion-card>
+          <ion-button fill="clear">
+            <ion-toggle [(ngModel)]="book.is_online"></ion-toggle>
+            <ion-label [color]="book.is_online? 'primary' : 'medium'">
+              Booking
             </ion-label>
-            <ion-button shape="round" color="success" slot="end" fill="clear"
-              (click)="book.bill.push({ key: '', value: 0 })">
-              <ion-icon name="add-circle-outline" slot="icon-only"></ion-icon>
-            </ion-button>
-          </ion-item-divider>
-        </ion-list>
-      </ion-card>
-    </ion-item>
+          </ion-button>
+        </ion-card>
+      </ion-item>
+
+      <ion-item color="primary">
+        <ion-card full>
+          <ion-list>
+            <ion-item>
+              <ion-icon slot="start" color="primary" icon="people-outline"></ion-icon>
+              <ion-label>Ospiti</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Persone n°:</ion-label>
+              <ion-input [(ngModel)]="book.peopleNumber" type="number" min="0">
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-card full>
+                <ion-item-divider>
+                  <ion-icon slot="start" color="primary" name="person-circle-outline"></ion-icon>
+                  <ion-label slot="start"> PERSONA </ion-label>
+                </ion-item-divider>
+                <ion-col size="12">
+                  <ion-item line="none">
+                    <ion-label position="floating">Cognome Nome</ion-label>
+                    <ion-input [(ngModel)]="book.people.cognome_nome"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-item line="none">
+                    <ion-label position="floating">Sesso</ion-label>
+                    <ion-input [(ngModel)]="book.people.sesso"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                  <!--  -->
+                </ion-col>
+                <ion-col size="6">
+                  <ion-item line="none">
+                    <ion-label position="floating">Data di Nascita</ion-label>
+                    <ion-input [(ngModel)]="book.people.data_nascita"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-item line="none">
+                    <ion-label position="floating">Luogo di nascita</ion-label>
+                    <ion-input [(ngModel)]="book.people.luogo_nascita"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-item line="none">
+                    <ion-label position="floating">Cittadinanza</ion-label>
+                    <ion-input [(ngModel)]="book.people.cittadinanza"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <!--  -->
+                <ion-item-divider>
+                  <ion-icon slot="start" name="home-outline" color="primary"></ion-icon>
+                  <ion-label slot="start"> RESIDENZA </ion-label>
+                </ion-item-divider>
+                <ion-col size="12">
+                  <ion-item line="none">
+                    <ion-label position="floating">Residenza</ion-label>
+                    <ion-textarea [(ngModel)]="book.people.residenza"></ion-textarea>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item line="none">
+                    <ion-label position="floating">Tipo documento</ion-label>
+                    <ion-input [(ngModel)]="book.people.tipo_documento"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-item line="none">
+                    <ion-label position="floating">Numero documento</ion-label>
+                    <ion-input [(ngModel)]="book.people.numero_documento"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item line="none">
+                    <ion-label position="floating">Luogo e data di rilascio</ion-label>
+                    <ion-input [(ngModel)]="book.people.luogo_data_rilascio"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-item-divider>
+                  <ion-icon slot="start" name="people-circle-outline" color="primary"></ion-icon>
+                  <ion-label slot="start">
+                    FAMIGLIARI / MEMBRI DEL GRUPPO
+                  </ion-label>
+                </ion-item-divider>
+                <ion-col>
+                  <ion-item *ngFor="let p of book.people.membri_gruppo; let i = index">
+                    <ion-card full>
+                      <ion-item>
+                        <ion-icon slot="start" color="primary" name="person-circle-outline"></ion-icon>
+                        <ion-label> MEMBRO {{ i + 2 }} </ion-label>
+                        <ion-button *ngIf="book._editable" fill="clear" shape="round" color="danger" slot="end"
+                          (click)="removePeople(i)" title="Rimuovi ospite">
+                          <ion-icon name="remove-circle-outline" slot="icon-only"></ion-icon>
+                        </ion-button>
+                      </ion-item>
+                      <ion-col size="12">
+                        <ion-item line="none">
+                          <ion-label position="floating">Cognome Nome</ion-label>
+                          <ion-input [(ngModel)]="p.cognome_nome"></ion-input>
+                        </ion-item>
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-item line="none">
+                          <ion-label position="floating">Sesso</ion-label>
+                          <ion-input [(ngModel)]="p.sesso"></ion-input>
+                        </ion-item>
+                      </ion-col>
+                      <ion-col size="6">
+                        <!--  -->
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-item line="none">
+                          <ion-label position="floating">Data di Nascita</ion-label>
+                          <ion-input [(ngModel)]="p.data_nascita"></ion-input>
+                        </ion-item>
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-item line="none">
+                          <ion-label position="floating">Luogo di nascita</ion-label>
+                          <ion-input [(ngModel)]="p.luogo_nascita"></ion-input>
+                        </ion-item>
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-item line="none">
+                          <ion-label position="floating">Cittadinanza</ion-label>
+                          <ion-input [(ngModel)]="p.cittadinanza"></ion-input>
+                        </ion-item>
+                      </ion-col>
+                    </ion-card>
+                  </ion-item>
+                </ion-col>
+                <ion-item lines="none">
+                  <ion-button *ngIf="book._editable" shape="round" color="success" slot="end" (click)="addPeople()"
+                    title="Aggiungi ospite">
+                    <ion-icon name="person-add-outline" slot="start"></ion-icon>
+                    <ion-text>Aggiungi Ospite</ion-text>
+                  </ion-button>
+                </ion-item>
+              </ion-card>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </ion-item>
+
+      <ion-item color="success">
+        <ion-card full>
+          <ion-list lines="full">
+            <ion-item>
+              <ion-icon name="card-outline" color="primary" slot="start"></ion-icon>
+              <ion-label>Totale</ion-label>
+            </ion-item>
+            <ion-item *ngIf="book.bill && book.bill.length > 0">
+              <ion-input disabled [(ngModel)]="book.bill[0].key" placeholder="Nome" slot="start"></ion-input>
+              <ion-input [(ngModel)]="book.bill[0].value" type="number" (change)="updateTotal(book)"
+                placeholder="Prezzo" step=".01">
+              </ion-input>
+              <ion-text slot="end">
+                € / notte &times; {{ this._rent_days }} gg = <ion-text color="medium">{{this._rent_days *
+                  book.bill[0].value}} €</ion-text>
+              </ion-text>
+            </ion-item>
+            <ion-item *ngIf="book.bill && book.bill.length > 1">
+              <ion-input disabled [(ngModel)]="book.bill[1].key" placeholder="Nome" slot="start"></ion-input>
+              <ion-input [(ngModel)]="book.bill[1].value" type="number" (change)="updateTotal(book)"
+                placeholder="Prezzo" step=".01">
+              </ion-input>
+              <ion-text slot="end">
+                € / notte &times; {{ this._rent_days }} gg = <ion-text color="medium">{{this._rent_days *
+                  book.bill[1].value}} €</ion-text>
+              </ion-text>
+            </ion-item>
+            <ion-item *ngFor="let item of book.bill | slice: 2; let i = index">
+
+              <ion-input [(ngModel)]="item.key" placeholder="Nome" slot="start"></ion-input>
+
+              <ion-input [(ngModel)]="item.value" type="number" (change)="updateTotal(book)" placeholder="Prezzo"
+                step=".01">
+              </ion-input>
+
+              <ion-button shape="round" fill="clear" color="danger" slot="end"
+                (click)="book.bill.splice(i, 1); updateTotal(book)">
+                <ion-icon name="remove-circle-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <ion-item-divider>
+              <ion-label slot="start"> Totale </ion-label>
+              <ion-label>
+                <b>{{ book._total }} €</b>
+              </ion-label>
+              <ion-button shape="round" color="success" slot="end" fill="clear"
+                (click)="book.bill.push({ key: '', value: 0 })">
+                <ion-icon name="add-circle-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-item-divider>
+          </ion-list>
+        </ion-card>
+      </ion-item>
+    </ng-container>
 
     <ion-item color="warning">
       <ion-card full>

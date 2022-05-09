@@ -17,7 +17,7 @@
     </ion-item>
     <ion-row>
       <ion-col>
-        <app-calendar-gantt [_rooms]="rooms"></app-calendar-gantt>
+        <app-calendar-gantt [_rooms]="rooms" *ngIf="rooms"></app-calendar-gantt>
       </ion-col>
     </ion-row>
     <hr>

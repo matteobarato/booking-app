@@ -20,6 +20,8 @@ export class BookStatus {
     confirmed: Number = 1;
     pending: Number = 0;
     canceled: Number = -1;
+    online: Number = 2;
+    draft: Number = 3;
 }
 
 export class Membro {
